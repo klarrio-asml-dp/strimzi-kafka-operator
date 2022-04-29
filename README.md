@@ -1,75 +1,29 @@
-[![Strimzi](./documentation/logo/strimzi.png)](https://strimzi.io/)
+Check: https://github.com/strimzi/strimzi-kafka-operator/blob/main/development-docs/DEV_GUIDE.md#build-and-deploy-from-source
 
-# Run Apache Kafka on Kubernetes and OpenShift
+Use java 11:
+- update-java-alternatives --list
+- sudo update-java-alternatives --set /path/to/java/version
 
-[![Build Status](https://dev.azure.com/cncf/strimzi/_apis/build/status/build?branchName=main)](https://dev.azure.com/cncf/strimzi/_build/latest?definitionId=16&branchName=main)
-[![GitHub release](https://img.shields.io/github/release/strimzi/strimzi-kafka-operator.svg)](https://github.com/strimzi/strimzi-kafka-operator/releases/latest)
-[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![Twitter Follow](https://img.shields.io/twitter/follow/strimziio.svg?style=social&label=Follow&style=for-the-badge)](https://twitter.com/strimziio)
+Comment out Klarrio ~/.m2/settings.xml
 
-Strimzi provides a way to run an [Apache Kafka®][kafka] cluster on 
-[Kubernetes][k8s] or [OpenShift][os] in various deployment configurations.
-See our [website][strimzi] for more details about the project.
+```
+export DOCKER_ORG=docker_hub_username (I used mathieutheerens)
+export DOCKER_REGISTRY=docker_registry_name  #defaults to docker.io if unset
+```
 
-## Quick Starts
+make MVN_ARGS='-DskipTests' all
 
-To get up and running quickly, check our [Quick Start for Minikube, OKD (OpenShift Origin) and Kubernetes Kind](https://strimzi.io/quickstarts/). 
 
-## Documentation
+If necessary change the path to images in `060-Deployment-strimzi-cluster-operator.yaml` to use a different artifactory than
+docker.io (docker.io/mathieutheerens/...)
 
-Documentation to the current _main_ branch as well as all releases can be found on our [website][strimzi].
 
-## Getting help
 
-If you encounter any issues while using Strimzi, you can get help using:
+`cd docker-images/kafka-based`
 
-- [#strimzi channel on CNCF Slack](https://slack.cncf.io/)
-- [Strimzi Users mailing list](https://lists.cncf.io/g/cncf-strimzi-users/topics)
-- [GitHub Discussions](https://github.com/strimzi/strimzi-kafka-operator/discussions)
+Copy the jar from the custom principal builder repo (https://github.com/klarrio-asml-dp/spiffe-principal-builder) to:
+- docker-images/kafka-based/kafka/tmp/3.0.0/libs
+- docker-images/kafka-based/kafka/tmp/3.0.1/libs
+- docker-images/kafka-based/kafka/tmp/3.1.0/libs
 
-## Strimzi Community Meetings
-
-You can join our regular community meetings:
-* Thursday 8:00 AM UTC (every 4 weeks starting from 4th June 2020) - [convert to your timezone](https://www.thetimezoneconverter.com/?t=8%3A00&tz=UTC)
-* Thursday 4:00 PM UTC (every 4 weeks starting from 18th June 2020) - [convert to your timezone](https://www.thetimezoneconverter.com/?t=16%3A00&tz=UTC)
-
-Resources:
-* [Meeting minutes, agenda and Zoom link](https://docs.google.com/document/d/1V1lMeMwn6d2x1LKxyydhjo2c_IFANveelLD880A6bYc/edit#heading=h.vgkvn1hr5uor)
-* [Recordings](https://youtube.com/playlist?list=PLpI4X8PMthYfONZopcRd4X_stq1C14Rtn)
-* [Calendar](https://calendar.google.com/calendar/embed?src=c_m9pusj5ce1b4hr8c92hsq50i00%40group.calendar.google.com) ([Subscribe to the calendar](https://calendar.google.com/calendar/u/0?cid=Y19tOXB1c2o1Y2UxYjRocjhjOTJoc3E1MGkwMEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t))
-
-## Contributing
-
-You can contribute by:
-- Raising any issues you find using Strimzi
-- Fixing issues by opening Pull Requests
-- Improving documentation
-- Talking about Strimzi
-
-All bugs, tasks or enhancements are tracked as [GitHub issues](https://github.com/strimzi/strimzi-kafka-operator/issues). Issues which 
-might be a good start for new contributors are marked with ["good-start"](https://github.com/strimzi/strimzi-kafka-operator/labels/good-start)
-label.
-
-The [Dev guide](https://github.com/strimzi/strimzi-kafka-operator/blob/main/development-docs/DEV_GUIDE.md) describes how to build Strimzi.
-Before submitting a patch, please make sure to understand, how to test your changes before opening a PR [Test guide](https://github.com/strimzi/strimzi-kafka-operator/blob/main/development-docs/TESTING.md).
-
-The [Documentation Contributor Guide](https://strimzi.io/contributing/guide/) describes how to contribute to Strimzi documentation.
-
-If you want to get in touch with us first before contributing, you can use:
-
-- [#strimzi channel on CNCF Slack](https://slack.cncf.io/)
-- [Strimzi Dev mailing list](https://lists.cncf.io/g/cncf-strimzi-dev/topics)
-
-## License
-Strimzi is licensed under the [Apache License](./LICENSE), Version 2.0
-
----
-
-Strimzi is a <a href="http://cncf.io">Cloud Native Computing Foundation</a> sandbox project.
-
-![CNCF ><](./documentation/logo/cncf-color.png)
-
-[strimzi]: https://strimzi.io "Strimzi"
-[kafka]: https://kafka.apache.org "Apache Kafka"
-[k8s]: https://kubernetes.io/ "Kubernetes"
-[os]: https://www.openshift.com/ "OpenShift"
+`make docker_build && make docker_push`
