@@ -31,5 +31,5 @@ Copy the jar from the custom principal builder repo (https://github.com/klarrio-
 And finally deploy the cluster operator on K8s (on kafka namespace) via:
 ```
 cd ../../
-kubectl -n kafka-op create -f packaging/install/cluster-operator
+kubectl -n kafka create -f packaging/install/cluster-operator
 ```
