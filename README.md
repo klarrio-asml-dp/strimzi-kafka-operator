@@ -14,8 +14,8 @@ export DOCKER_REGISTRY=docker_registry_name  #defaults to docker.io if unset
 make MVN_ARGS='-DskipTests' all
 
 
-If necessary change the path to images in `060-Deployment-strimzi-cluster-operator.yaml` to use a different artifactory than
-docker.io (docker.io/mathieutheerens/...)
+If necessary change the path to images in `060-Deployment-strimzi-cluster-operator.yaml` to use a different artifactory 
+than docker.io (docker.io/mathieutheerens/...)
 
 
 
@@ -27,3 +27,9 @@ Copy the jar from the custom principal builder repo (https://github.com/klarrio-
 - docker-images/kafka-based/kafka/tmp/3.1.0/libs
 
 `make docker_build && make docker_push`
+
+And finally deploy the cluster operator on K8s (on kafka namespace) via:
+```
+cd ../../
+kubectl -n kafka-op create -f packaging/install/cluster-operator
+```
